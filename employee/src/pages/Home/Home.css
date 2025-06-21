@@ -1,0 +1,789 @@
+:root {
+  /* Color Palette Refinements */
+  --primary: #5a76e7; /* Slightly adjusted primary blue */
+  --primary-light: #eef2ff;
+  --primary-dark: #3a56c8; /* Darker shade for gradients/active states */
+  --success: #48bb78;
+  --success-light: #f0fff4;
+  --danger: #f56565;
+  --danger-light: #fff5f5;
+  --warning: #ed8936;
+  --warning-light: #fffaf0;
+  --info: #4299e1;
+  --info-light: #ebf8ff;
+  --text: #2d3748; /* Dark grey for main text */
+  --text-light: #718096; /* Lighter grey for secondary text */
+  --text-lighter: #a0aec0; /* Even lighter for subtle details */
+  --bg: #f5f7fa; /* Lighter background for a cleaner look */
+  --card-bg: #ffffff;
+  --border: #e2e8f0; /* Softer border color */
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-strong: rgba(0, 0, 0, 0.15);
+}
+
+body {
+  margin: 0;
+  padding-bottom: 80px; /* Increased padding for bottom nav */
+  background: var(--bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-container {
+  margin: 0 auto;
+  padding: 25px; /* Slightly increased padding */
+  background-color: var(--bg);
+  min-height: 100vh;
+  max-width: 550px; /* Slightly wider for better content flow */
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Header Section */
+.header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border-radius: 20px; /* More rounded corners */
+  padding: 30px 35px; /* Increased padding */
+  margin-bottom: 35px; /* More spacing */
+  box-shadow: 0 8px 25px rgba(79, 107, 221, 0.3); /* Stronger, softer shadow */
+  position: relative;
+  overflow: hidden; /* For any background elements */
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative; /* Ensure content is above ::before */
+  z-index: 1;
+}
+
+.app-title {
+  font-size: 26px; /* Larger title */
+  font-weight: 800; /* Bolder */
+  margin: 0;
+  letter-spacing: -0.7px; /* Tighter letter spacing */
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 18px; /* More space */
+}
+
+.profile-icon {
+  width: 55px; /* Slightly larger */
+  height: 55px; /* Slightly larger */
+  background-color: rgba(255, 255, 255, 0.25); /* More prominent transparency */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Larger icon */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+}
+
+.greeting {
+  text-align: right;
+}
+
+.greeting-text {
+  margin: 0;
+  font-size: 15px; /* Slightly larger */
+  opacity: 0.95; /* More opaque */
+  font-weight: 500;
+}
+
+.user-name {
+  margin: 3px 0 0;
+  font-size: 19px; /* Slightly larger */
+  font-weight: 700; /* Bolder */
+}
+
+.user-role {
+  margin: 2px 0 0;
+  font-size: 13px; /* Slightly larger */
+  opacity: 0.85; /* More opaque */
+  font-weight: 500;
+}
+
+/* General Section Styling */
+.section {
+  background: var(--card-bg);
+  border-radius: 18px; /* Consistent rounding */
+  padding: 30px; /* More internal padding */
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px var(--shadow-light); /* Softer, more spread out shadow */
+  border: 1px solid var(--border);
+  transition: all 0.3s ease-in-out;
+}
+
+.section:hover {
+  box-shadow: 0 6px 20px var(--shadow-medium);
+  transform: translateY(-2px);
+}
+
+.section-title {
+  font-size: 20px; /* Larger title */
+  font-weight: 700; /* Bolder */
+  margin: 0 0 25px; /* More spacing below title */
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 12px; /* More space for icon */
+}
+
+.section-icon {
+  font-size: 18px; /* Larger icon */
+  opacity: 0.85;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.view-all-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 17px; /* Slightly larger */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px; /* Larger hit area */
+  height: 34px; /* Larger hit area */
+  border-radius: 50%;
+  transition: all 0.2s ease-out;
+  outline: none; /* Remove outline on focus */
+}
+
+.view-all-btn:hover {
+  background-color: var(--primary-light);
+  transform: scale(1.08); /* Slight bounce */
+}
+
+.view-all-btn:active {
+  transform: scale(0.98); /* Press effect */
+}
+
+/* Timing/Attendance Section */
+.timing-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* Stretch items to same height */
+  gap: 20px;
+}
+
+.timing-card {
+  flex: 1;
+  text-align: center;
+  padding: 25px; /* More padding */
+  border-radius: 14px; /* Consistent rounding */
+  background-color: var(--primary-light);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(79, 107, 221, 0.15); /* Slightly stronger border */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.timing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(79, 107, 221, 0.15); /* Stronger shadow on hover */
+}
+
+.timing-icon {
+  font-size: 24px; /* Larger icon */
+  margin-bottom: 12px; /* More space */
+  color: var(--primary);
+}
+
+.time {
+  font-size: 28px; /* Larger time font */
+  font-weight: 800; /* Bolder */
+  margin: 10px 0 6px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.date {
+  font-size: 14px; /* Slightly larger date */
+  color: var(--text-light);
+  margin: 0;
+  font-weight: 500;
+}
+
+.status-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* More space */
+}
+
+.status-toggle {
+  padding: 12px 25px; /* More padding */
+  border-radius: 28px; /* More rounded pill shape */
+  font-weight: 600;
+  font-size: 15px; /* Slightly larger font */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* More space for icon */
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth animation */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.status-toggle.active {
+  background-color: var(--success); /* Solid color for active */
+  color: white;
+  box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+}
+
+.status-toggle.active:hover {
+  background-color: #38a169; /* Darker green on hover */
+  transform: translateY(-2px);
+}
+
+.status-toggle.inactive {
+  background-color: var(--danger); /* Solid color for inactive */
+  color: white;
+  box-shadow: 0 4px 10px rgba(245, 101, 101, 0.3);
+}
+
+.status-toggle.inactive:hover {
+  background-color: #e53e3e; /* Darker red on hover */
+  transform: translateY(-2px);
+}
+
+.status-toggle:hover {
+  transform: translateY(-2px); /* Lift effect */
+}
+
+.status-icon {
+  font-size: 20px; /* Larger icon */
+}
+
+.total-hours {
+  font-size: 14px; /* Slightly larger */
+  color: var(--text-light);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Break Section */
+.break-section .section-title {
+  color: var(--warning); /* Consistent color for section title */
+}
+
+.break-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* Stretch items to same height */
+  gap: 20px;
+}
+
+.break-timing {
+  flex: 1;
+  text-align: center;
+  padding: 25px; /* More padding */
+  border-radius: 14px;
+  background-color: var(--warning-light);
+  border: 1px solid rgba(237, 137, 54, 0.15); /* Slightly stronger border */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.break-timing:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(237, 137, 54, 0.15);
+}
+
+.break-icon {
+  font-size: 24px; /* Larger icon */
+  margin-bottom: 12px;
+  color: var(--warning);
+}
+
+.break-toggle {
+  padding: 12px 25px;
+  border-radius: 28px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.break-toggle.on-break {
+  background-color: var(--warning); /* Solid color for on-break */
+  color: white;
+  box-shadow: 0 4px 10px rgba(237, 137, 54, 0.3);
+}
+
+.break-toggle.on-break:hover {
+  background-color: #d67a2c; /* Darker orange on hover */
+  transform: translateY(-2px);
+}
+
+.break-toggle.working {
+  background-color: var(--success); /* Using success color for working status */
+  color: white;
+  box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+}
+
+.break-toggle.working:hover {
+  background-color: #38a169; /* Darker green on hover */
+  transform: translateY(-2px);
+}
+
+.break-toggle:hover {
+  transform: translateY(-2px);
+}
+
+.break-status-icon {
+  font-size: 18px; /* Larger icon */
+}
+
+.duration,
+.break-type {
+  font-size: 14px;
+  color: var(--text-light);
+  margin: 5px 0 0;
+  font-weight: 500;
+}
+
+/* Activity Section */
+.activity-section .section-title {
+  color: var(--primary);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* More space between items */
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px; /* More space for bullet */
+  padding-bottom: 20px; /* More padding */
+  border-bottom: 1px dashed var(--border); /* Dashed border for softer separation */
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activity-bullet {
+  width: 14px; /* Slightly larger bullet */
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 5px; /* Align with text */
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.activity-bullet.success { background-color: var(--success); }
+.activity-bullet.info { background-color: var(--info); }
+.activity-bullet.warning { background-color: var(--warning); }
+.activity-bullet.primary { background-color: var(--primary); }
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-text {
+  margin: 0;
+  font-size: 16px; /* Slightly larger text */
+  font-weight: 500;
+  color: var(--text);
+}
+
+.activity-time {
+  margin: 4px 0 0; /* More space */
+  font-size: 13px; /* Slightly larger time */
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--card-bg); /* Use card background for consistency */
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0; /* More padding */
+  box-shadow: 0 -4px 20px var(--shadow-light); /* Softer shadow */
+  z-index: 100;
+  border-top: 1px solid var(--border);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-light); /* Lighter grey for inactive */
+  font-size: 13px; /* Slightly larger text */
+  text-decoration: none;
+  padding: 5px 10px; /* Add some padding for touch area */
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-item.active,
+.nav-item:focus,
+.nav-item:hover {
+  color: var(--primary);
+  background-color: var(--primary-light); /* Subtle background on hover/active */
+}
+
+.nav-icon {
+  font-size: 22px; /* Larger icons */
+  margin-bottom: 5px; /* More space */
+}
+
+/* Error and Loading States */
+.error-message {
+  background-color: var(--danger-light);
+  color: var(--danger);
+  padding: 12px 18px; /* More padding */
+  border-radius: 10px; /* Consistent rounding */
+  margin-bottom: 25px; /* More space */
+  display: flex;
+  align-items: center;
+  gap: 12px; /* More space */
+  font-weight: 500;
+  border: 1px solid rgba(245, 101, 101, 0.2); /* Subtle border */
+}
+
+.loading-state, .error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: 0 4px 15px var(--shadow-light);
+  margin-bottom: 25px;
+}
+
+.loading-state p, .error-state p {
+  font-size: 16px;
+  color: var(--text-light);
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.spinner {
+  border: 4px solid var(--primary-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+.retry-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.retry-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* Checkin/Checkout Buttons (if used in cards) */
+.checkin-btn, .checkout-btn {
+  margin-top: 15px; /* More space from other content */
+  padding: 10px 20px; /* More padding */
+  border: none;
+  border-radius: 8px; /* Slightly more rounded */
+  font-weight: 600; /* Bolder text */
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: inline-flex; /* To align spinner */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.checkin-btn {
+  background-color: var(--success);
+  color: white;
+}
+
+.checkin-btn:hover {
+  background-color: #38a169;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+}
+
+.checkout-btn {
+  background-color: var(--danger);
+  color: white;
+}
+
+.checkout-btn:hover {
+  background-color: #e53e3e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(245, 101, 101, 0.3);
+}
+
+.checkin-btn:disabled, .checkout-btn:disabled {
+  background-color: var(--text-lighter); /* Greyer disabled state */
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 18px; /* Slightly larger */
+  height: 18px; /* Slightly larger */
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite; /* Faster spin */
+  margin-right: 0; /* Removed margin-right as gap handles it */
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+  .app-container {
+    padding: 15px;
+  }
+
+  .header {
+    padding: 25px 25px;
+    margin-bottom: 25px;
+    border-radius: 16px;
+  }
+
+  .app-title {
+    font-size: 22px;
+  }
+
+  .user-profile {
+    gap: 12px;
+  }
+
+  .profile-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .greeting-text {
+    font-size: 13px;
+  }
+
+  .user-name {
+    font-size: 16px;
+  }
+
+  .user-role {
+    font-size: 11px;
+  }
+
+  .section {
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    gap: 8px;
+  }
+
+  .section-icon {
+    font-size: 16px;
+  }
+
+  .timing-box,
+  .break-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .timing-card,
+  .break-timing {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .time {
+    font-size: 24px;
+  }
+
+  .date {
+    font-size: 12px;
+  }
+
+  .status-toggle,
+  .break-toggle {
+    padding: 10px 20px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .status-icon,
+  .break-status-icon {
+    font-size: 18px;
+  }
+
+  .activity-list {
+    gap: 15px;
+  }
+
+  .activity-item {
+    gap: 15px;
+    padding-bottom: 15px;
+  }
+
+  .activity-text {
+    font-size: 14px;
+  }
+
+  .activity-time {
+    font-size: 11px;
+  }
+
+  .bottom-nav {
+    padding: 10px 0;
+  }
+
+  .nav-item {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .nav-icon {
+    font-size: 18px;
+    margin-bottom: 3px;
+  }
+
+  .checkin-btn, .checkout-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+}
+
+/* Even smaller screens (e.g., old iPhones SE) */
+@media (max-width: 375px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 20px;
+  }
+
+  .app-title {
+    font-size: 20px;
+  }
+
+  .user-profile {
+    flex-direction: column; /* Stack profile info on very small screens */
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .section {
+    padding: 15px;
+  }
+}
+/* Break History Table Styles */
+.break-history-table {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.break-history-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.break-history-table th {
+  background-color: var(--warning-light);
+  color: var(--warning);
+  padding: 10px;
+  text-align: left;
+  border-bottom: 2px solid var(--warning);
+}
+
+.break-history-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.break-history-table tr:last-child td {
+  border-bottom: none;
+}
+
+.no-breaks {
+  text-align: center;
+  color: var(--text-light);
+  padding: 20px 0;
+}
+
+/* Break section clickable area */
+.break-section {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.break-section:hover {
+  box-shadow: 0 6px 20px rgba(237, 137, 54, 0.15);
+}
