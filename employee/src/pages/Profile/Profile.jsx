@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import "./Profile.css";
-import { FaArrowLeft  } from "react-icons/fa";
+import { FaArrowLeft, FaSignOutAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [form, setForm] = useState({
-    firstName: localStorage.getItem('name'),
-    lastName: "Mehta",
-    email: localStorage.getItem('email'),
+    firstName: localStorage.getItem('name') || '',
+    lastName: localStorage.getItem('name'),
+    email: localStorage.getItem('email') || '',
     password: "********",
     confirmPassword: "********",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,8 +20,19 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     alert("Profile saved!");
+  };
+
+  const handleLogout = () => {
+  
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
+    localStorage.removeItem('id');
+    
+
+    navigate('/login');
   };
 
   return (
@@ -29,9 +43,17 @@ const Profile = () => {
             <FaArrowLeft />
           </button>
           <div className="header-title">
-            <h1>Profle</h1>
+            <h1>Profile</h1>
           </div>
-          <div style={{ width: '40px' }}></div>
+          <button className="logout-button" onClick={handleLogout}>
+            <FaSignOutAlt />
+          </button>
+        </div>
+      </div>
+
+      <div className="profile-logo">
+        <div className="logo-circle">
+          {form.firstName ? form.firstName.charAt(0).toUpperCase() : 'U'}
         </div>
       </div>
 
@@ -44,7 +66,13 @@ const Profile = () => {
           onChange={handleChange}
         />
 
-        
+        <label>Last name</label>
+        <input
+          type="text"
+          name="lastName"
+          value={form.lastName}
+          onChange={handleChange}
+        />
 
         <label>Email</label>
         <input
@@ -52,6 +80,7 @@ const Profile = () => {
           name="email"
           value={form.email}
           onChange={handleChange}
+          disabled
         />
 
         <label>Password</label>

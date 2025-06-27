@@ -2,17 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './Leads.css';
 import axios from 'axios';
 import {
-  FiSearch,
-  FiEdit,
-  FiClock,
-  FiChevronDown,
-  FiCalendar,
-  FiX,
-  FiUser,
-  FiMail,
-  FiPhone,
-  FiPlus,
-  FiArrowLeft,
+  FiSearch, FiEdit, FiClock, FiChevronDown,
+  FiCalendar, FiX, FiUser, FiMail, FiPhone,
+  FiArrowLeft, FiFilter
 } from 'react-icons/fi';
 
 const Leads = () => {
@@ -22,6 +14,9 @@ const Leads = () => {
   const [employee, setEmployee] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [allLeads, setAllLeads] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +29,9 @@ const Leads = () => {
         });
 
         setEmployee(response.data);
-        setLeads(response.data.assignedLeads ? response.data.assignedLeads.reverse() : []);
+        const leadsData = response.data.assignedLeads ? response.data.assignedLeads.reverse() : [];
+        setLeads(leadsData);
+        setAllLeads(leadsData);
         setIsLoading(false);
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -48,6 +45,31 @@ const Leads = () => {
 
   const toggleDropdown = (leadId, dropdownType) => {
     setActiveDropdown(activeDropdown === `${leadId}-${dropdownType}` ? null : `${leadId}-${dropdownType}`);
+  };
+
+  const filterLeads = (filterType) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let filtered = [...allLeads];
+
+    if (filterType === 'today') {
+      filtered = allLeads.filter(lead => {
+        const leadDate = new Date(lead.leadDate);
+        leadDate.setHours(0, 0, 0, 0);
+        return leadDate.getTime() === today.getTime();
+      });
+    } else if (filterType === 'previous') {
+      filtered = allLeads.filter(lead => {
+        const leadDate = new Date(lead.leadDate);
+        leadDate.setHours(0, 0, 0, 0);
+        return leadDate.getTime() < today.getTime();
+      });
+    }
+
+    setLeads(filtered);
+    setActiveFilter(filterType);
+    setShowFilterDropdown(false);
   };
 
   const updateLeadProperty = async (leadId, property, value) => {
@@ -108,13 +130,48 @@ const Leads = () => {
     }
   };
 
+  const handleDateTimeChange = (leadId, key, value) => {
+    setLeads(prev =>
+      prev.map(l =>
+        l._id === leadId ? { ...l, [key]: value } : l
+      )
+    );
+  };
+
+  const handleDateTimeSubmit = async (lead) => {
+    const token = localStorage.getItem('token');
+    const { tempDate, tempTime } = lead;
+
+    if (!tempDate || !tempTime) return alert("Please select both date and time.");
+
+    try {
+      const isoString = new Date(`${tempDate}T${tempTime}`).toISOString();
+
+      await axios.patch(
+        `https://sales-backend-mern-production.up.railway.app/api/leads/${lead._id}`,
+        { leadDate: isoString },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setLeads(prev =>
+        prev.map(l =>
+          l._id === lead._id
+            ? { ...l, leadDate: isoString, tempDate: '', tempTime: '' }
+            : l
+        )
+      );
+
+      setActiveDropdown(null);
+    } catch (err) {
+      console.error('Failed to update lead date:', err);
+      alert('Error updating date and time.');
+    }
+  };
+
   const filteredLeads = leads.filter(lead =>
-    lead.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.phone?.includes(searchTerm) ||
-    lead.source?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.status?.toLowerCase().includes(searchTerm.toLowerCase())
+    Object.values(lead).some(
+      value => value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
   const getStatusClass = (status) => {
@@ -147,20 +204,19 @@ const Leads = () => {
 
   return (
     <div className="leads-page">
-      {/* Beautiful Gradient Header */}
-      <div className="header">
+      <header className="header">
         <div className="header-content">
           <button className="back-button" onClick={() => window.history.back()}>
             <FiArrowLeft />
           </button>
-          <div className="header-title">
-            <h1>Leads
-            
-            </h1>
+          <h1 className="app-title">CRM Dashboard</h1>
+          <div className="user-profile">
+            <div className="greeting">
+              <h1>Leadds</h1>
+            </div>
           </div>
-          <div style={{ width: '40px' }}></div>
         </div>
-      </div>
+      </header>
 
       <div className="leads-content-area">
         <div className="search-filter-bar">
@@ -168,7 +224,7 @@ const Leads = () => {
             <FiSearch className="icon" />
             <input
               type="text"
-              placeholder="Search" 
+              placeholder="Search all fields..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -176,6 +232,36 @@ const Leads = () => {
               <button onClick={() => setSearchTerm('')} className="clear-icon">
                 <FiX />
               </button>
+            )}
+          </div>
+          <div className="filter-container">
+            <button
+              className="filter-button"
+              onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            >
+              <FiFilter className="filter-icon" />
+            </button>
+            {showFilterDropdown && (
+              <div className="filter-dropdown">
+                <button
+                  className={`filter-option ${activeFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => filterLeads('all')}
+                >
+                  All Leads
+                </button>
+                <button
+                  className={`filter-option ${activeFilter === 'today' ? 'active' : ''}`}
+                  onClick={() => filterLeads('today')}
+                >
+                  Today
+                </button>
+                <button
+                  className={`filter-option ${activeFilter === 'previous' ? 'active' : ''}`}
+                  onClick={() => filterLeads('previous')}
+                >
+                  Previous
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -199,7 +285,7 @@ const Leads = () => {
                       </div>
                       <div className="action-buttons">
                         <button onClick={() => toggleDropdown(lead._id, 'type')}><FiEdit /></button>
-                        <button onClick={() => toggleDropdown(lead._id, 'schedule')}><FiClock /></button>
+                        <button onClick={() => toggleDropdown(lead._id, 'time')}><FiClock /></button>
                         <button onClick={() => toggleDropdown(lead._id, 'status')}><FiChevronDown /></button>
                       </div>
                     </div>
@@ -219,6 +305,7 @@ const Leads = () => {
                       ))}
                     </div>
                   )}
+
                   {activeDropdown === `${lead._id}-status` && (
                     <div className="dropdown status-dropdown">
                       {['New', 'Contacted', 'Qualified', 'Ongoing', 'Closed'].map((status) => (
@@ -228,11 +315,28 @@ const Leads = () => {
                       ))}
                     </div>
                   )}
-                  {activeDropdown === `${lead._id}-schedule` && (
-                    <div className="dropdown schedule-dropdown">
-                      <button>Schedule Call</button>
-                      <button>Schedule Meeting</button>
-                      <button>Set Reminder</button>
+
+                  {activeDropdown === `${lead._id}-time` && (
+                    <div className="dropdown time-dropdown">
+                      <div className="time-option">
+                        <label>Date:</label>
+                        <input
+                          type="date"
+                          value={lead.tempDate || ''}
+                          onChange={(e) => handleDateTimeChange(lead._id, 'tempDate', e.target.value)}
+                        />
+                      </div>
+                      <div className="time-option">
+                        <label>Time:</label>
+                        <input
+                          type="time"
+                          value={lead.tempTime || ''}
+                          onChange={(e) => handleDateTimeChange(lead._id, 'tempTime', e.target.value)}
+                        />
+                      </div>
+                      <button className="time-save" onClick={() => handleDateTimeSubmit(lead)}>
+                        Set Time
+                      </button>
                     </div>
                   )}
                 </div>

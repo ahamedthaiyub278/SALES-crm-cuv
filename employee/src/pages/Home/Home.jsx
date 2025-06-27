@@ -32,7 +32,6 @@ const Home = () => {
   }, [isOnBreak, isCheckedOut]);
 
   useEffect(() => {
-    // Fetch break history when component mounts
     fetchBreakHistory();
   }, []);
 
@@ -42,7 +41,6 @@ const Home = () => {
         `https://sales-backend-mern-production.up.railway.app/api/activities?employeeId=${employeeId}&activity=Break`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Process the response to extract break start/end times
       const processedBreaks = processBreakData(response.data);
       setBreakHistory(processedBreaks);
     } catch (err) {
@@ -51,7 +49,6 @@ const Home = () => {
   };
 
   const processBreakData = (activities) => {
-    // This function processes the raw activity data to extract break start/end pairs
     const breaks = [];
     let currentBreak = null;
     
@@ -71,12 +68,11 @@ const Home = () => {
       }
     });
     
-    // If we have an unclosed break (started but not ended)
     if (currentBreak) {
       breaks.push(currentBreak);
     }
     
-    return breaks.slice(0, 4); // Return only the first 4 breaks
+    return breaks.reverse().slice(0, 20); 
   };
 
   const updateEmployeeStatus = async (status) => {
@@ -105,7 +101,6 @@ const Home = () => {
         { activity_string, activity },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Refresh break history after logging new activity
       fetchBreakHistory();
     } catch (err) {
       console.error('Failed to log activity:', err);
@@ -126,8 +121,12 @@ const Home = () => {
     }
   };
 
-  const toggleBreakHistory = () => {
-    setShowBreakHistory(!showBreakHistory);
+  const toggleBreakHistory = async () => {
+    const newShowBreakHistory = !showBreakHistory;
+    setShowBreakHistory(newShowBreakHistory);
+    if (newShowBreakHistory) {
+      await logActivity(`${userName} viewed break history`, ['Viewed Break History']);
+    }
   };
 
   const handleCheckIn = async () => {
@@ -197,36 +196,26 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="section break-section" onClick={toggleBreakHistory}>
-          <h2 className="section-title">
-            <FaPause className="section-icon" /> Break Time
-          </h2>
-          {!showBreakHistory ? (
-            <div className="break-container">
-              <div className="break-timing">
-                <div className="break-icon">
-                  <FaPause />
-                </div>
-                <h3>Start</h3>
-                <p className="time">{breakStartTime}</p>
-              </div>
-
-              <div className="break-timing">
-                <div className="break-icon">
-                  <FaPlay />
-                </div>
-                <h3>End</h3>
-                <p className="time">{breakEndTime}</p>
-                <p className="duration">{calculateBreakDuration(breakStartTime, breakEndTime)} mins</p>
-              </div>
-              <div className="status-indicator">
-                <button className={`break-toggle ${isOnBreak ? 'on-break' : 'working'}`} onClick={toggleBreakStatus} disabled={isLoading || isCheckedOut}>
-                  {isOnBreak ? <><FaPause className="break-status-icon" /><span></span></> : <><FaPlay className="break-status-icon" /><span></span></>}
-                </button>
-                <p className="break-type"></p>
-              </div>
+        <section className="section break-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              <FaPause className="section-icon" /> Break Time
+            </h2>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <button className="history-toggle-btn" onClick={toggleBreakHistory}>
+                <FaHistory /> {showBreakHistory ? 'Hide History' : 'Show History'}
+              </button>
+              <button 
+                className="history-toggle-btn" 
+                onClick={toggleBreakStatus}
+                style={{ backgroundColor: isOnBreak ? '#dc3545' : '#28a745', color: 'white' }}
+              >
+                {isOnBreak ? 'End Break' : 'Take Break'}
+              </button>
             </div>
-          ) : (
+          </div>
+
+          {!showBreakHistory ? "" : (
             <div className="break-history-table">
               <table>
                 <thead>
@@ -299,6 +288,15 @@ const Home = () => {
                 <div className="activity-content">
                   <p className="activity-text">{userName} checked out at {checkOutTime}</p>
                   <p className="activity-time">Today</p>
+                </div>
+              </div>
+            )}
+            {showBreakHistory && (
+              <div className="activity-item">
+                <div className="activity-bullet secondary"></div>
+                <div className="activity-content">
+                  <p className="activity-text">{userName} viewed break history</p>
+                  <p className="activity-time">Just now</p>
                 </div>
               </div>
             )}

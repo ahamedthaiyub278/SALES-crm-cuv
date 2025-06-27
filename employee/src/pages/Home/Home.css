@@ -787,3 +787,52 @@ body {
 .break-section:hover {
   box-shadow: 0 6px 20px rgba(237, 137, 54, 0.15);
 }
+.history-toggle-btn {
+  background: none;
+  border: none;
+  color: #4e73df;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.history-toggle-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.break-toggle.not-on-break {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.break-toggle.not-on-break:hover {
+  background-color: #c0392b;
+}
+
+.break-toggle.on-break {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.break-toggle.on-break:hover {
+  background-color: #27ae60;
+}
+
+.break-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.break-status-icon {
+  font-size: 14px;
+}

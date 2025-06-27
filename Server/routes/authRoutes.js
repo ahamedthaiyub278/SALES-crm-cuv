@@ -83,6 +83,40 @@ router.post('/register-employee', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+router.patch('/update-employee/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    const allowedUpdates = ['name', 'email', 'role', 'location', 'language', 'status', 'Assigned', 'Closed_leads'];
+    const isValidUpdate = Object.keys(updates).every(update => allowedUpdates.includes(update));
+
+    if (!isValidUpdate) {
+      return res.status(400).json({ error: 'Invalid updates!' });
+    }
+
+ 
+    if (updates.email) {
+      const existingEmployee = await Employee.findOne({ email: updates.email });
+      if (existingEmployee && existingEmployee._id.toString() !== id) {
+        return res.status(400).json({ error: 'Email already in use' });
+      }
+    }
+
+    const employee = await Employee.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    res.json({ message: 'Employee updated successfully', employee });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 
 module.exports = router;
