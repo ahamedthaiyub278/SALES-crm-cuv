@@ -2,15 +2,9 @@
 
 This is a full-stack **Sales CRM** project built as part of the Final Evaluation at Cuvette. It consists of three main parts:
 
-- `Server` – Node.js + Express.js backend
-- `Client` – React.js frontend for admins
-- `Employee` – React.js frontend for employees
-
----
-## 🌐 Live Websites
-
-- 🔑 [Admin Login](https://adminloginpage-cuvette.netlify.app)
-- 👷 [Employee Login](https://employeeloginsales.netlify.app/)
+- `Server` – Node.js + Express.js backend  
+- `Client` – React.js frontend for admins  
+- `Employee` – React.js frontend for employees  
 
 ---
 
@@ -66,10 +60,16 @@ Runs the employee panel on `http://localhost:5174` (or whichever Vite port is co
 
 ## 📽️ Demo Video
 
-[![Watch the demo](https://img.youtube.com/vi/h1jlC6UMaao/0.jpg)](https://youtu.be/h1jlC6UMaao?si=ijDuK_85zMaO_ODi)
+[![Watch the demo](https://img.youtube.com/vi/47QSp_9-JzQ/0.jpg)](https://youtu.be/47QSp_9-JzQ)
 
 ---
 
+## 🌐 Live Websites
+
+- 🔑 [Admin Login](https://adminloginpage-cuvette.netlify.app)  
+- 👷 [Employee Login](https://employeeloginsales.netlify.app/)
+
+---
 
 ## 🧑‍💻 Author
 
