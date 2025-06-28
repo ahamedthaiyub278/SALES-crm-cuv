@@ -7,6 +7,12 @@ This is a full-stack **Sales CRM** project built as part of the Final Evaluation
 - `Employee` – React.js frontend for employees
 
 ---
+## 🌐 Live Websites
+
+- 🔑 [Admin Login](https://adminloginpage-cuvette.netlify.app)
+- 👷 [Employee Login](https://employeeloginsales.netlify.app/)
+
+---
 
 ## 📁 Project Structure
 
@@ -60,12 +66,12 @@ Runs the employee panel on `http://localhost:5174` (or whichever Vite port is co
 
 ## 📽️ Demo Video
 
-I have also attached a video walkthrough of the project setup and functionality for reference.
+[![Watch the demo](https://img.youtube.com/vi/h1jlC6UMaao/0.jpg)](https://youtu.be/h1jlC6UMaao?si=ijDuK_85zMaO_ODi)
 
 ---
 
+
 ## 🧑‍💻 Author
 
-**Ahamed Thaiyub**
-
+**Ahamed Thaiyub**  
 GitHub: [ahamedthaiyub278](https://github.com/ahamedthaiyub278)
