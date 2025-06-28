@@ -12,10 +12,10 @@ function App() {
     <Router>
       <div className="app-container">
         <Routes>
-          {/* Public routes */}
+ 
           <Route path="/login" element={<Login />} />
           
-          {/* Protected routes */}
+      
           <Route element={<PrivateRoute />}>
             <Route path="/" element={
               <>
@@ -49,7 +49,7 @@ function App() {
             } />
           </Route>
           
-          {/* Catch-all route */}
+          {/* royteeeeeeee*/}
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </div>

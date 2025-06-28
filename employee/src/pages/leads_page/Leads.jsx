@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Leads.css';
 import axios from 'axios';
-import {
-  FiSearch, FiEdit, FiClock, FiChevronDown,
-  FiCalendar, FiX, FiUser, FiMail, FiPhone,
-  FiArrowLeft, FiFilter
-} from 'react-icons/fi';
+import { FiSearch, FiEdit, FiClock, FiChevronDown, FiCalendar, FiX, FiUser, FiMail, FiPhone, FiArrowLeft, FiFilter } from 'react-icons/fi';
+import HeaderLeads from '../../components/HeaderLeads';
 
 const Leads = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -17,17 +14,14 @@ const Leads = () => {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
   const [allLeads, setAllLeads] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
         const id = localStorage.getItem('id');
-
         const response = await axios.get(`https://sales-backend-mern-production.up.railway.app/api/employees/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setEmployee(response.data);
         const leadsData = response.data.assignedLeads ? response.data.assignedLeads.reverse() : [];
         setLeads(leadsData);
@@ -39,20 +33,15 @@ const Leads = () => {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, []);
-
   const toggleDropdown = (leadId, dropdownType) => {
     setActiveDropdown(activeDropdown === `${leadId}-${dropdownType}` ? null : `${leadId}-${dropdownType}`);
   };
-
   const filterLeads = (filterType) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     let filtered = [...allLeads];
-
     if (filterType === 'today') {
       filtered = allLeads.filter(lead => {
         const leadDate = new Date(lead.leadDate);
@@ -66,29 +55,22 @@ const Leads = () => {
         return leadDate.getTime() < today.getTime();
       });
     }
-
     setLeads(filtered);
     setActiveFilter(filterType);
     setShowFilterDropdown(false);
   };
-
   const updateLeadProperty = async (leadId, property, value) => {
     try {
       const token = localStorage.getItem('token');
       const lead = leads.find(l => l._id === leadId);
-
       if (!lead || lead[property] === value) return;
-
       const previousStatus = lead.status;
-
       await axios.patch(
         `https://sales-backend-mern-production.up.railway.app/api/leads/${leadId}`,
         { [property]: value },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setLeads(leads.map(l => l._id === leadId ? { ...l, [property]: value } : l));
-
       if (property === 'status' && value === 'Closed' && previousStatus !== 'Closed') {
         const employeeId = localStorage.getItem('id');
         if (employeeId) {
@@ -110,7 +92,6 @@ const Leads = () => {
           setEmployee(prevEmp => prevEmp ? { ...prevEmp, Closed_leads: Math.max(0, (prevEmp.Closed_leads || 0) - 1) } : null);
         }
       }
-
       const empName = employee?.name || 'Someone';
       const propertyName = property === 'status' ? 'status' : 'type';
       const readableActivity = property === 'status' ? 'Updated Status' : 'Updated Type';
@@ -204,19 +185,8 @@ const Leads = () => {
 
   return (
     <div className="leads-page">
-      <header className="header">
-        <div className="header-content">
-          <button className="back-button" onClick={() => window.history.back()}>
-            <FiArrowLeft />
-          </button>
-          <h1 className="app-title">CRM Dashboard</h1>
-          <div className="user-profile">
-            <div className="greeting">
-              <h1>Leadds</h1>
-            </div>
-          </div>
-        </div>
-      </header>
+   <HeaderLeads/>
+
 
       <div className="leads-content-area">
         <div className="search-filter-bar">
@@ -308,7 +278,7 @@ const Leads = () => {
 
                   {activeDropdown === `${lead._id}-status` && (
                     <div className="dropdown status-dropdown">
-                      {['New', 'Contacted', 'Qualified', 'Ongoing', 'Closed'].map((status) => (
+                      {['Ongoing', 'Closed'].map((status) => (
                         <button key={status} onClick={() => updateLeadProperty(lead._id, 'status', status)} className={getStatusClass(status)}>
                           {status}
                         </button>

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import "./Profile.css";
-import { FaArrowLeft, FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import HeaderProfle from "../../components/HeaderProfle";
 
 const Profile = () => {
   const [form, setForm] = useState({
-    firstName: localStorage.getItem('name') || '',
-    lastName: localStorage.getItem('name'),
-    email: localStorage.getItem('email') || '',
+    firstName: localStorage.getItem("name") || "",
+    lastName: localStorage.getItem("name"),
+    email: localStorage.getItem("email") || "",
     password: "********",
     confirmPassword: "********",
   });
@@ -24,49 +25,35 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-  
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
-    localStorage.removeItem('role');
-    localStorage.removeItem('id');
-    
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
+    localStorage.removeItem("id");
 
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <div className="profile-container">
-      <div className="header">
-        <div className="header-content">
-          <button className="back-button" onClick={() => window.history.back()}>
-            <FaArrowLeft />
-          </button>
-          <div className="header-title">
-            <h1>Profile</h1>
-          </div>
-          <button className="logout-button" onClick={handleLogout}>
-            <FaSignOutAlt />
-          </button>
-        </div>
+      <HeaderProfle />
+
+      {/* Logout Button - Positioned Top Right or Below Header */}
+      <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px 20px" }}>
+        <button className="logout-btn" onClick={handleLogout}>
+          <FaSignOutAlt style={{ marginRight: "6px" }} />
+          Logout
+        </button>
       </div>
 
       <div className="profile-logo">
         <div className="logo-circle">
-          {form.firstName ? form.firstName.charAt(0).toUpperCase() : 'U'}
+          {form.firstName ? form.firstName.charAt(0).toUpperCase() : "U"}
         </div>
       </div>
 
       <form className="profile-form" onSubmit={handleSubmit}>
-        <label>First name</label>
-        <input
-          type="text"
-          name="firstName"
-          value={form.firstName}
-          onChange={handleChange}
-        />
-
-        <label>Last name</label>
+        <label> name</label>
         <input
           type="text"
           name="lastName"
@@ -87,6 +74,7 @@ const Profile = () => {
         <input
           type="password"
           name="password"
+          disabled
           value={form.password}
           onChange={handleChange}
         />
@@ -96,10 +84,13 @@ const Profile = () => {
           type="password"
           name="confirmPassword"
           value={form.confirmPassword}
+          disabled
           onChange={handleChange}
         />
 
-        <button type="submit" className="save-btn">Save</button>
+        <button type="submit" className="save-btn">
+          Save
+        </button>
       </form>
     </div>
   );

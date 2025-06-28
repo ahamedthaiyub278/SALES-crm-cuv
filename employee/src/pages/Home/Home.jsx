@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { 
-  FaUser, FaClock, FaSignInAlt, FaSignOutAlt, 
-  FaPause, FaPlay, FaHistory, FaEllipsisH 
+import {FaUser, FaClock, FaSignInAlt, FaSignOutAlt,FaPause, FaPlay, FaHistory, FaEllipsisH //podhum da 
 } from 'react-icons/fa';
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from 'react-icons/io';
 import './Home.css';
+import Header from '../../components/Header';
 
 const Home = () => {
+ 
+
   const [isActive, setIsActive] = useState(true);
   const [isOnBreak, setIsOnBreak] = useState(false);
   const [isCheckedOut, setIsCheckedOut] = useState(false);
-  const [checkInTime, setCheckInTime] = useState('09:00 AM');
-  const [checkOutTime, setCheckOutTime] = useState('06:00 PM');
+const currentDate = new Date();
+const [checkInTime, setCheckInTime] = useState(
+  `${currentDate.getHours()}:${currentDate.getMinutes().toString().padStart(2, '0')}`
+);
+
+  const [checkOutTime, setCheckOutTime] = useState('__:__ ');
   const [breakStartTime, setBreakStartTime] = useState('01:00 PM');
   const [breakEndTime, setBreakEndTime] = useState('01:30 PM');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showBreakHistory, setShowBreakHistory] = useState(false);
+  const [showBreakHistory, setShowBreakHistory] = useState(true);
   const [breakHistory, setBreakHistory] = useState([]);
+  const [greeting, setGreeting] = useState("");
 
   const token = localStorage.getItem('token');
   const employeeId = localStorage.getItem('id') || 'nil';
@@ -27,12 +33,22 @@ const Home = () => {
 
   useEffect(() => {
     const newStatus = !(isOnBreak || isCheckedOut);
-    setIsActive(newStatus);
+    setIsActive(newStatus);//haaaaaaa stsus 
     updateEmployeeStatus(newStatus ? 'Active' : 'Inactive');
   }, [isOnBreak, isCheckedOut]);
 
   useEffect(() => {
     fetchBreakHistory();
+  }, []);
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      setGreeting("Good Morning");
+    } else if (hour < 17) {
+      setGreeting("Good Afternoon");
+    } else {
+      setGreeting("Good Evening");
+    }
   }, []);
 
   const fetchBreakHistory = async () => {
@@ -51,10 +67,10 @@ const Home = () => {
   const processBreakData = (activities) => {
     const breaks = [];
     let currentBreak = null;
-    
+
     activities.forEach(activity => {
       if (activity.activity_string.includes('started a break')) {
-        currentBreak = { 
+        currentBreak = {
           start: new Date(activity.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           startDate: new Date(activity.createdAt).toLocaleDateString(),
           end: null,
@@ -67,12 +83,12 @@ const Home = () => {
         currentBreak = null;
       }
     });
-    
+
     if (currentBreak) {
       breaks.push(currentBreak);
     }
-    
-    return breaks.reverse().slice(0, 20); 
+
+    return breaks.reverse().slice(0, 20);
   };
 
   const updateEmployeeStatus = async (status) => {
@@ -122,7 +138,7 @@ const Home = () => {
   };
 
   const toggleBreakHistory = async () => {
-    const newShowBreakHistory = !showBreakHistory;
+    const newShowBreakHistory = showBreakHistory;
     setShowBreakHistory(newShowBreakHistory);
     if (newShowBreakHistory) {
       await logActivity(`${userName} viewed break history`, ['Viewed Break History']);
@@ -147,70 +163,72 @@ const Home = () => {
 
   return (
     <div className="app-container">
-      <header className="header">
-        <div className="header-content">
-          <h1 className="app-title">CRM Dashboard</h1>
-          <div className="user-profile">
-            <div className="greeting">
-              <p className="greeting-text">{new Date().getHours() < 12 ? "Good Morning" : new Date().getHours() < 18 ? "Good Afternoon" : "Good Evening"}</p>
-              <h1 className="user-name">{userName}</h1>
-              <p className="user-role">{Role} Manager</p>
-            </div>
-          </div>
-        </div>
-      </header>
+   <Header/>
+
 
       <main className="content">
         {error && <div className="error-message">{error}</div>}
 
-        <section className="section timing-section">
-          <h2 className="section-title">
-            <FaClock className="section-icon" /> Today's Timings
-          </h2>
-          <div className="timing-box">
-            <div className="timing-card">
-              <div className="timing-icon">
-                <FaSignInAlt />
-              </div>
-              <h3>Check in</h3>
-              <p className="time">{checkInTime}</p>
-              <p className="date">{new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: '2-digit' })}</p>
-              {isCheckedOut && <button className="checkin-btn" onClick={handleCheckIn} disabled={isLoading}>Check In</button>}
-            </div>
+<section className="section timing-section">
+  <h2 className="section-title">
+    <FaClock className="section-icon" /> Timings
+  </h2>
 
-            <div className="timing-card">
-              <div className="timing-icon">
-                <FaSignOutAlt />
-              </div>
-              <h3>Checkout</h3>
-              <p className="time">{checkOutTime}</p>
-              <p className="date">{new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: '2-digit' })}</p>
-              {!isCheckedOut && <button className="checkout-btn" onClick={handleCheckOut} disabled={isLoading}>Check Out</button>}
-            </div>
+  <div className="unified-timing-card">
+    <div className="timing-info">
+      <div className="timing-block">
+        <div className="timing-label">Checked-In</div>
+        <div className="timing-value">{checkInTime}</div>
+        {isCheckedOut && (
+          <button className="checkin-btn hidden-btn" onClick={handleCheckIn} disabled={isLoading}>
+            Check In
+          </button>
+        )}
+      </div>
+      <div className="timing-block">
+        <div className="timing-label">Check Out</div>
+        <div className="timing-value">{checkOutTime || "--:-- __"}</div>
+        {!isCheckedOut && (
+          <button className="checkout-btn hidden-btn" onClick={handleCheckOut} disabled={isLoading}>
+            Check Out
+          </button>
+        )}
+      </div>
+    </div>
 
-            <div className="status-indicator">
-              <div className={`status-toggle ${isActive ? 'active' : 'inactive'}`}>
-                {isActive ? <><IoMdCheckmarkCircle className="status-icon" /><span></span></> : <><IoMdCloseCircle className="status-icon" /><span></span></>}
-              </div>
-            </div>
-          </div>
-        </section>
+    <div
+      className="status-indicator pill-indicator"
+      onClick={() => {
+        isActive ? handleCheckOut() : handleCheckIn();
+      }}
+    >
+      <div className={`status-toggle ${isActive ? 'active' : 'inactive'}`}>
+        {isActive ? (
+          <IoMdCheckmarkCircle className="status-icon" />
+        ) : (
+          <IoMdCloseCircle className="status-icon" />
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 
         <section className="section break-section">
           <div className="section-header">
             <h2 className="section-title">
-              <FaPause className="section-icon" /> Break Time
+              Break Time
             </h2>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <button className="history-toggle-btn" onClick={toggleBreakHistory}>
-                <FaHistory /> {showBreakHistory ? 'Hide History' : 'Show History'}
-              </button>
-              <button 
-                className="history-toggle-btn" 
+              
+              <button
+                className="history-toggle-btn"
                 onClick={toggleBreakStatus}
                 style={{ backgroundColor: isOnBreak ? '#dc3545' : '#28a745', color: 'white' }}
               >
-                {isOnBreak ? 'End Break' : 'Take Break'}
+                {isOnBreak ? '' : ''}
               </button>
             </div>
           </div>

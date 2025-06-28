@@ -1,29 +1,18 @@
-:root {
-  --primary: #3B82F6;
-  --primary-light: #EFF6FF;
-  --text: #1F2937;
-  --text-light: #6B7280;
-  --border: #E5E7EB;
-  --bg: #F9FAFB;
-  --card-bg: #FFFFFF;
-  --highlight: #FFF2E6;
-  --error: #EF4444;
-  --success: #10B981;
-}
+
 
 .tasks-app {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   max-width: 800px;
-  margin: 0 auto;
+
   padding: 20px;
-  background-color: var(--bg);
+  background-color: #F9FAFB;
   min-height: 100vh;
 }
 
 .app-header {
   display: flex;
   flex-direction: column;
-  margin-bottom: 24px;
+ 
 }
 
 .app-brand {
@@ -36,24 +25,24 @@
 .app-name {
   font-size: 24px;
   font-weight: 700;
-  color: var(--text);
+  color: #1F2937;
 }
 
 .app-name-highlight {
   font-size: 24px;
   font-weight: 700;
-  color: var(--primary);
+  color: #3B82F6;
 }
 
 .page-title {
   font-size: 28px;
   font-weight: 600;
-  color: var(--text);
+  color: #1F2937;
   margin: 0;
 }
 
 .tasks-content {
-  background-color: var(--card-bg);
+  background-color: #FFFFFF;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -75,29 +64,29 @@
 .search-input {
   width: 100%;
   padding: 10px 15px 10px 40px;
-  border: 1px solid var(--border);
+  border: 1px solid #E5E7EB;
   border-radius: 8px;
   font-size: 14px;
-  background-color: var(--bg);
+  background-color: #F9FAFB;
   transition: all 0.2s;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: #3B82F6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .search-icon {
   position: absolute;
   left: 15px;
-  color: var(--text-light);
+  color: #6B7280;
 }
 
 .clear-icon {
   position: absolute;
   right: 15px;
-  color: var(--text-light);
+  color: #6B7280;
   cursor: pointer;
 }
 
@@ -107,16 +96,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 8px;
-  color: var(--primary);
+  color: #3B82F6;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .filter-button:hover {
-  background-color: var(--primary-light);
+  background-color: #EFF6FF;
 }
 
 .tasks-list {
@@ -126,23 +115,23 @@
 }
 
 .task-card {
-  background-color: var(--card-bg);
+  background-color: #FFFFFF;
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid #E5E7EB;
   transition: all 0.2s;
 }
 
 .task-card.highlighted {
-  background-color: var(--highlight);
-  border-left: 4px solid var(--primary);
+  background-color: #e6e9ff;
+  border-left: 4px solid #3B82F6;
 }
 
 .task-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+
 }
 
 .task-type {
@@ -151,8 +140,8 @@
   font-size: 12px;
   font-weight: 500;
   text-transform: capitalize;
-  background-color: var(--primary-light);
-  color: var(--primary);
+  background-color: #EFF6FF;
+  color: #3B82F6;
 }
 
 .task-type.referral {
@@ -175,7 +164,7 @@
   align-items: center;
   gap: 12px;
   font-size: 13px;
-  color: var(--text-light);
+  color: #6B7280;
 }
 
 .task-date, .task-time {
@@ -194,43 +183,46 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text);
+  color: #1F2937;
 }
 
 .phone-icon {
-  color: var(--primary);
+  color: #3B82F6;
 }
+
 .header {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%);
   color: white;
-  border-radius: 20px; /* More rounded corners */
-  padding: 30px 35px; /* Increased padding */
-  margin-bottom: 35px; /* More spacing */
-  box-shadow: 0 8px 25px rgba(79, 107, 221, 0.3); /* Stronger, softer shadow */
+  border-radius: 20px;
+  padding: 30px 35px;
+  margin-bottom: 35px;
+  box-shadow: 0 8px 25px rgba(79, 107, 221, 0.3);
   position: relative;
-  overflow: hidden; /* For any background elements */
+  overflow: hidden;
 }
 
 .header::before {
   content: '';
   position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: rgba(255, 255, 255, 0.1);
+  top: -60px;
+  left: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
   border-radius: 50%;
-  transform: rotate(45deg);
+  filter: blur(4px);
+  z-index: 0;
 }
 
 .header-content {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  position: relative; /* Ensure content is above ::before */
+  text-align: center;
+  position: relative;
   z-index: 1;
 }
-
 
 .task-details {
   display: flex;
@@ -240,7 +232,7 @@
 
 .task-method {
   font-size: 13px;
-  color: var(--text-light);
+  color: #6B7280;
   text-transform: capitalize;
 }
 
@@ -265,17 +257,17 @@
 
 .person-name {
   font-weight: 500;
-  color: var(--text);
+  color: #1F2937;
 }
 
 .chevron-icon {
-  color: var(--text-light);
+  color: #6B7280;
 }
 
 .no-tasks {
   text-align: center;
   padding: 40px;
-  color: var(--text-light);
+  color: #6B7280;
   font-size: 16px;
 }
 
@@ -291,20 +283,22 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--primary-light);
-  border-top-color: var(--primary);
+  border: 4px solid #EFF6FF;
+  border-top-color: #3B82F6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .retry-btn {
   padding: 8px 16px;
-  background-color: var(--primary);
+  background-color: #3B82F6;
   color: white;
   border: none;
   border-radius: 4px;
@@ -315,36 +309,7 @@
 .retry-btn:hover {
   opacity: 0.9;
 }
-.header {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-  border-radius: 20px; /* More rounded corners */
-  padding: 30px 35px; /* Increased padding */
-  margin-bottom: 35px; /* More spacing */
-  box-shadow: 0 8px 25px rgba(79, 107, 221, 0.3); /* Stronger, softer shadow */
-  position: relative;
-  overflow: hidden; /* For any background elements */
-}
 
-.header::before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transform: rotate(45deg);
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative; /* Ensure content is above ::before */
-  z-index: 1;
-}
 .filter-container {
   position: relative;
   display: inline-block;

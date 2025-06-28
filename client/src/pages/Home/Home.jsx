@@ -114,9 +114,9 @@ const Home = () => {
   const totalClosedLeads = employees.reduce((sum, emp) => sum + (emp.Closed_leads || 0), 0);
   const activeSalespeople = employees.filter(emp => emp.status === "Active").length;
   const unassignedLeads = leads.filter(lead => !lead.assignedTo).length;
-  const conversionRate = totalAssignedLeads
-    ? Math.round((totalClosedLeads / totalAssignedLeads) * 100)
-    : 0;
+const conversionRate = totalAssignedLeads
+  ? Math.round((totalClosedLeads / totalAssignedLeads) * 100)
+  : 0;
 
   const weekLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const closedLeadsPerDay = Array(7).fill(0);

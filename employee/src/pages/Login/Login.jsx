@@ -6,8 +6,8 @@ import { FaBuilding } from "react-icons/fa";
 import './Login.css';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("ahamedthaiyub27@gmail.com");
+  const [password, setPassword] = useState("Ahamed Madurai");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -26,18 +26,16 @@ const Login = () => {
 
       const { token, user } = res.data;
       
-      // Store authentication data
+   
       localStorage.setItem("token", token);
       localStorage.setItem("name", user.name);  
       localStorage.setItem("email", user.email);
       localStorage.setItem("role", user.role);
       localStorage.setItem("id", user._id);
 
-      // Force refresh of auth state
+     
       window.location.href = "/";
       
-      // Alternative (if you don't want full reload):
-      // navigate("/", { replace: true });
       
     } catch (err) {
       const errorMessage = err.response?.data?.message || 
@@ -55,14 +53,14 @@ const Login = () => {
       <div className="login-container">
         <div className="login-brand">
           <FaBuilding className="company-icon" />
-          <h1>Enterprise Portal</h1>
+          <h1>Ahamed CRM</h1>
           <p>Secure Employee Access</p>
         </div>
 
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-header">
             <h2>Sign In</h2>
-            <p>Enter your credentials to continue</p>
+            
           </div>
 
           {error && <div className="error-message">{error}</div>}
@@ -96,13 +94,8 @@ const Login = () => {
           </div>
 
           <div className="form-options">
-            <label className="remember-me">
-              <input type="checkbox" />
-              <span>Keep me signed in</span>
-            </label>
-            <a href="/reset-password" className="forgot-password">
-              Forgot password?
-            </a>
+            
+           
           </div>
 
           <button 
@@ -120,10 +113,7 @@ const Login = () => {
             )}
           </button>
 
-          <div className="login-footer">
-            <p>Need an account? <a href="/request-access">Request access</a></p>
-            <p className="copyright">© {new Date().getFullYear()} Enterprise Inc.</p>
-          </div>
+          
         </form>
       </div>
     </div>

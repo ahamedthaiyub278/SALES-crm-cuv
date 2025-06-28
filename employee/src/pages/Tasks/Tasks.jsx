@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Tasks.css";
-import { 
-  FiSearch, 
-  FiFilter, 
-  FiPhone, 
+import {
+  FiSearch,
+  FiFilter,
+  FiPhone,
   FiChevronRight,
   FiCalendar,
   FiClock,
@@ -13,10 +13,11 @@ import {
 } from "react-icons/fi";
 import { IoCallOutline } from "react-icons/io5";
 import axios from 'axios';
+import HeaderTask from "../../components/Headertask";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  const [allTasks, setAllTasks] = useState([]); // Store all tasks for filtering
+  const [allTasks, setAllTasks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,9 +34,9 @@ const Tasks = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        
+
         const employeeData = response.data;
-        const transformedTasks = employeeData.assignedLeads.map((lead, index) => ({
+        const transformedTasks = employeeData.assignedLeads.map((lead) => ({
           _id: lead._id,
           type: lead.type || 'Follow-up',
           phone: lead.phone || 'No phone',
@@ -44,7 +45,7 @@ const Tasks = () => {
             day: '2-digit',
             year: 'numeric'
           }),
-          rawDate: new Date(lead.leadDate), // Store Date object for filtering
+          rawDate: new Date(lead.leadDate),
           time: new Date(lead.leadDate).toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit'
@@ -55,9 +56,9 @@ const Tasks = () => {
           avatarColor: getAvatarColor(lead.name),
           status: lead.status
         }));
-        
+
         setAllTasks(transformedTasks);
-        setTasks(transformedTasks); 
+        setTasks(transformedTasks);
         setIsLoading(false);
       } catch (err) {
         console.error('Error fetching tasks:', err);
@@ -78,9 +79,9 @@ const Tasks = () => {
   const filterTasks = (filterType) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     let filtered = [...allTasks];
-    
+
     if (filterType === 'today') {
       filtered = allTasks.filter(task => {
         const taskDate = new Date(task.rawDate);
@@ -94,7 +95,7 @@ const Tasks = () => {
         return taskDate.getTime() < today.getTime();
       });
     }
-    
+
     setTasks(filtered);
     setActiveFilter(filterType);
     setShowFilterDropdown(false);
@@ -133,37 +134,27 @@ const Tasks = () => {
 
   return (
     <div className="tasks-app">
-      <div className="header">
-        <div className="header-content">
-          <button className="back-button" onClick={() => window.history.back()}>
-            <FiArrowLeft />
-          </button>
-          <div className="header-title">
-            <h1>Tasks</h1>
-          </div>
-          <div style={{ width: '40px' }}></div>
-        </div>
-      </div>
+      <HeaderTask />
       <main className="tasks-content">
         <div className="tasks-controls">
           <div className="search-container">
             <FiSearch className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search tasks..." 
+            <input
+              type="text"
+              placeholder="Search tasks..."
               className="search-input"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             {searchTerm && (
-              <FiX 
-                className="clear-icon" 
-                onClick={() => setSearchTerm('')} 
+              <FiX
+                className="clear-icon"
+                onClick={() => setSearchTerm('')}
               />
             )}
           </div>
           <div className="filter-container">
-            <button 
+            <button
               className="filter-button"
               onClick={() => setShowFilterDropdown(!showFilterDropdown)}
             >
@@ -171,19 +162,19 @@ const Tasks = () => {
             </button>
             {showFilterDropdown && (
               <div className="filter-dropdown">
-                <button 
+                <button
                   className={`filter-option ${activeFilter === 'all' ? 'active' : ''}`}
                   onClick={() => filterTasks('all')}
                 >
                   All Tasks
                 </button>
-                <button 
+                <button
                   className={`filter-option ${activeFilter === 'today' ? 'active' : ''}`}
                   onClick={() => filterTasks('today')}
                 >
                   Today
                 </button>
-                <button 
+                <button
                   className={`filter-option ${activeFilter === 'previous' ? 'active' : ''}`}
                   onClick={() => filterTasks('previous')}
                 >
@@ -195,50 +186,51 @@ const Tasks = () => {
         </div>
 
         <div className="tasks-list">
-          {filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
-              <div
-                key={task._id}
-                className={`task-card ${task.priority === 'high' ? "highlighted" : ""}`}
-              >
-                <div className="task-header">
-                  <span className={`task-type ${task.type?.toLowerCase().replace(' ', '-')}`}>
-                    {task.type || 'Task'}
-                  </span>
-                  <div className="task-date-time">
-                    <span className="task-date">
-                      <FiCalendar /> {task.date}
+          {filteredTasks.filter(task => task.status !== "Closed").length > 0 ? (
+            filteredTasks
+              .filter(task => task.status !== "Closed")
+              .map((task) => (
+                <div
+                  key={task._id}
+                  className={`task-card ${task.priority === 'high' ? "highlighted" : ""}`}
+                >
+                  <div className="task-header">
+                    <span className={`task-type ${task.type?.toLowerCase().replace(' ', '-')}`}>
+                      {task.method || 'Task'}
                     </span>
-                    <span className="task-time">
-                      <FiClock /> {task.time}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="task-main">
-                  <div className="task-phone-container">
-                    <IoCallOutline className="phone-icon" />
-                    <span className="task-phone">{task.phone}</span>
-                  </div>
-                  
-                  <div className="task-details">
-                    <span className="task-method">{task.method}</span>
-                    <div className="task-person">
-                      <div 
-                        className="person-avatar" 
-                        style={{ backgroundColor: task.avatarColor }}
-                      >
-                        {task.person?.charAt(0) || '?'}
-                      </div>
-                      <span className="person-name">
-                        {task.person}
+                    <div className="task-date-time">
+                      <span className="task-date">
+                        <FiCalendar /> {task.date}
                       </span>
-                      <FiChevronRight className="chevron-icon" />
+                      <span className="task-time">
+                        <FiClock /> {task.time}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="task-main">
+                    <div className="task-phone-container">
+                      <IoCallOutline className="phone-icon" />
+                      <span className="task-phone">{task.phone}</span>
+                    </div>
+
+                    <div className="task-details">
+                      <span className="task-method">Priority: {task.priority}</span>
+                      <div className="task-person">
+                        <div
+                          className="person-avatar"
+                          style={{ backgroundColor: task.avatarColor }}
+                        >
+                          {task.person?.charAt(0) || '?'}
+                        </div>
+                        <span className="person-name">
+                          {task.person}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
             <div className="no-tasks">
               {searchTerm ? "No matching tasks found" : "No tasks scheduled"}

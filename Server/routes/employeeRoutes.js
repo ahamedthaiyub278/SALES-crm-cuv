@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     const employees = await Employee.find().populate('assignedLeads');
     res.json(employees);
   } catch (err) {
-    console.error(' Error in /api/employees:', err); // Add logging
+    console.error(' Error in /api/employees:', err); 
     res.status(500).json({ error: 'Server error', details: err.message });
   }
 });
